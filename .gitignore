@@ -1,4 +1,13 @@
 
+### Gradle/Intellij Project ###
+.gradle
+.idea
+gradle/
+lib/
+build/
+gradlew
+gradlew.bat
+
 # Created by https://www.toptal.com/developers/gitignore/api/macos,linux,windows,terraform
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,linux,windows,terraform
 
