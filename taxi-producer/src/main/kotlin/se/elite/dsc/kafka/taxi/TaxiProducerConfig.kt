@@ -1,4 +1,4 @@
-package se.elite.dsc.kafka.taxi.producer
+package se.elite.dsc.kafka.taxi
 
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
