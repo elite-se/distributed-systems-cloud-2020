@@ -1,4 +1,4 @@
-package se.elite.dsc.kafka.taxi.metrics
+package se.elite.dsc.kafka.taxi.trip
 
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.streams.StreamsConfig

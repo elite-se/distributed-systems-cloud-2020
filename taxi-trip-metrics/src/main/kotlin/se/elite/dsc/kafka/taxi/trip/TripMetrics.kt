@@ -1,4 +1,4 @@
-package se.elite.dsc.kafka.taxi.metrics
+package se.elite.dsc.kafka.taxi.trip
 
 import org.apache.kafka.common.serialization.Serdes
 import org.apache.kafka.common.utils.Bytes
@@ -18,12 +18,20 @@ import kotlin.math.round
 import kotlin.system.exitProcess
 
 
-class TripMetricsApp {
-    private val logger = LogManager.getLogger(javaClass)
+class TripMetrics(val config: TripMetricsConfig) {
+    private val log = LogManager.getLogger(javaClass)
+    private val stream = constructStream()
 
-    fun run(config: TripMetricsConfig) {
+    fun start() {
+        stream.start()
+    }
+
+    fun close() {
+        stream.close()
+    }
+
+    fun constructStream(): KafkaStreams {
         val props = config.createProperties()
-
         val cellSerde = JsonObjectSerde(Cell::class.java)
         val tripSerde = JsonObjectSerde(Trip::class.java)
         val pointSerde = JsonObjectSerde(Point::class.java)
@@ -42,28 +50,12 @@ class TripMetricsApp {
                                 .withValueSerde(pointSerde))
                 .toStream()
 
-        windowed.foreach { key: Windowed<Cell>, value: Point? -> logger.info("key: ${key.key()}, val:$value") }
+        windowed.foreach { key: Windowed<Cell>, value: Point? -> log.info("key: ${key.key()}, val:$value") }
         val average: KStream<Cell?, Double> = windowed
                 .map<Cell?, Double> { window: Windowed<Cell>, point: Point -> KeyValue(window.key(), round(point.y * 100) / 100) }
-        average.foreach { key: Cell?, value: Double? -> logger.info("key: $key, val: $value") }
+        average.foreach { key: Cell?, value: Double? -> log.info("key: $key, val: $value") }
         average.to(config.sinkTopic, Produced.with(cellSerde, Serdes.Double()))
-        val streams = KafkaStreams(builder.build(), props)
-        val latch = CountDownLatch(1)
 
-        // attach shutdown handler to catch control-c
-        Runtime.getRuntime().addShutdownHook(object : Thread("trip-metrics-shutdown-hook") {
-            override fun run() {
-                streams.close()
-                latch.countDown()
-            }
-        })
-        try {
-            streams.start()
-            latch.await()
-        } catch (e: Throwable) {
-            exitProcess(1)
-        }
-        exitProcess(0)
-   }
-
+        return KafkaStreams(builder.build(), props)
+    }
 }
