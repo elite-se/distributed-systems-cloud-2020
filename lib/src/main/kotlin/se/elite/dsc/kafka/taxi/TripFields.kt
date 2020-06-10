@@ -1,13 +1,21 @@
 package se.elite.dsc.kafka.taxi
 
 enum class TripFields {
-    MEDALLION, HACK_LICENSE, PICKUP_DATETIME, DROPOFF_DATETIME, TRIP_TIME,  //(seconds)
-    TRIP_DISTANCE,  //(miles)
-    PICKUP_LONGITUDE, PICKUP_LATITUDE, DROPOFF_LONGITUDE, DROPOFF_LATITUDE, PAYMENT_TYPE,  //(CSH/CRD)
-    FARE_AMOUNT,  //(dollars)
-    SURCHARGE,  //(dollars)
-    MTA_TAX,  //(dollars)
-    TIP_AMOUNT,  //(dollars)
-    TOLLS_AMOUNT,  //(dollars)
-    TOTAL_AMOUNT //(dollars)
+    MEDALLION, // md5sum identifier of the taxi (vehicle bound)
+    HACK_LICENSE, // md5sum of the tax license
+    PICKUP_DATETIME, // time when passenger(s) were picked up
+    DROPOFF_DATETIME, // time when passenger(s) were dropped off
+    TRIP_TIME,  // duration in seconds
+    TRIP_DISTANCE,  // distance in miles
+    PICKUP_LONGITUDE, // longitude of pickup
+    PICKUP_LATITUDE, // latitude of pickup
+    DROPOFF_LONGITUDE, // longitude of drop-off
+    DROPOFF_LATITUDE, // latitude of drop-off
+    PAYMENT_TYPE,  // cash (CSH) or credit card (CRD) payment
+    FARE_AMOUNT,  // fare amount in dollars
+    SURCHARGE,  // surcharge in dollars
+    MTA_TAX,  // tax in dollars
+    TIP_AMOUNT,  // tip in dollars
+    TOLLS_AMOUNT,  // bridge and tunnel tolls in dollars
+    TOTAL_AMOUNT // total paid amount in dollars
 }
