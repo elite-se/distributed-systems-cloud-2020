@@ -7,6 +7,7 @@ dependencies {
     implementation("org.apache.kafka:kafka-clients:2.5.0")
     implementation("com.fasterxml.jackson.core:jackson-databind:2.9.6")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.9.6")
+    implementation("org.apache.kafka:kafka-streams:2.0.0")
 }
 
 repositories {

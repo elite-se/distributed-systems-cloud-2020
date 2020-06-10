@@ -10,12 +10,12 @@ class TripConverterConfig(val groupId: String, val sourcetopic: String, val sink
 
     override fun createProperties(): Properties {
         val props = super.createProperties()
-        props.put(StreamsConfig.APPLICATION_ID_CONFIG, groupId);
-        props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        props.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
-        props.put(StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG, 0);
-        props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String()::class.java);
-        props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String()::class.java);
+        props[StreamsConfig.APPLICATION_ID_CONFIG] = groupId;
+        props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest";
+        props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "false";
+        props[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = 0;
+        props[StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG] = Serdes.String()::class.java;
+        props[StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG] = Serdes.String()::class.java;
         return props
     }
 }
