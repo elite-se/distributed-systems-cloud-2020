@@ -16,9 +16,9 @@ dependencies {
     implementation(kotlin("stdlib"))
     implementation("com.google.guava:guava:28.0-jre")
     implementation("org.apache.kafka:kafka-clients:2.5.0")
+    implementation("org.apache.kafka:kafka-streams:2.5.0")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("org.slf4j:slf4j-log4j12:1.7.25")
-    implementation("org.apache.kafka:kafka-streams:2.0.0")
     implementation(project(":lib"))
 }
 
