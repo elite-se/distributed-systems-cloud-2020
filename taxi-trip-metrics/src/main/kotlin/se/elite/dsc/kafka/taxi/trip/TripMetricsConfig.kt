@@ -7,7 +7,7 @@ import java.util.*
 
 import se.elite.dsc.kafka.taxi.TripTimestampExtractor
 
-class TripMetricsConfig(val groupId: String = "taxi-source", val sourcetopic: String, val sinkTopic: String) : KafkaConfig() {
+class TripMetricsConfig(val groupId: String, val sourcetopic: String, val sinkTopic: String) : KafkaConfig() {
     override fun createProperties(): Properties {
         val props = super.createProperties()
         props[StreamsConfig.APPLICATION_ID_CONFIG] = groupId
