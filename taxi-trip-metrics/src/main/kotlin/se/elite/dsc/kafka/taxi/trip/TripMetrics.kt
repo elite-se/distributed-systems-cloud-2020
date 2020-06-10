@@ -12,6 +12,7 @@ import se.elite.dsc.kafka.JsonObjectSerde
 import se.elite.dsc.kafka.taxi.Cell
 import se.elite.dsc.kafka.taxi.Point
 import se.elite.dsc.kafka.taxi.Trip
+import java.time.Duration
 import java.util.concurrent.CountDownLatch
 import java.util.concurrent.TimeUnit
 import kotlin.math.round
@@ -40,7 +41,7 @@ class TripMetrics(val config: TripMetricsConfig) {
         val source = builder.stream(config.sourcetopic, Consumed.with(cellSerde, tripSerde))
         val windowed = source
                 .groupByKey(Grouped.with(cellSerde, tripSerde))
-                .windowedBy(TimeWindows.of(TimeUnit.MINUTES.toMillis(15)))
+                .windowedBy(TimeWindows.of(Duration.ofMillis(TimeUnit.MINUTES.toMillis(15))))
                 .aggregate(
                         { Point(0.0, 0.0) },
                         { _, value, profit ->
