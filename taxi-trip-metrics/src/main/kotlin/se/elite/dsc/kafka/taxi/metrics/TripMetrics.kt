@@ -35,8 +35,8 @@ class TripMetricsApp {
                 .windowedBy(TimeWindows.of(TimeUnit.MINUTES.toMillis(15)))
                 .aggregate(
                         { Point(0.0, 0.0) },
-                        { _, (_, _, _, _, _, _, _, _, _, fareAmount, _, _, tipAmount), profit ->
-                            Point(profit.x + 1, profit.y + (fareAmount + tipAmount))
+                        { _, value, profit ->
+                            Point(profit.x + 1, profit.y + (value.fareAmount + value.tipAmount))
                         },
                         Materialized.`as`<Cell, Point, WindowStore<Bytes, ByteArray>>("profit-store")
                                 .withValueSerde(pointSerde))
