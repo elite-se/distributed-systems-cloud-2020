@@ -396,8 +396,11 @@ kubeStateMetrics:
 ## kube-state-metrics sub-chart configurable values
 ## Please see https://github.com/helm/charts/tree/master/stable/kube-state-metrics
 ##
-# kube-state-metrics:
-
+kube-state-metrics:
+  resources:
+    requests:
+      cpu: 10m
+      memory: 30Mi
 nodeExporter:
   ## If false, node-exporter will not be installed
   ##
@@ -858,9 +861,9 @@ server:
     limits:
       cpu: 500m
       memory: 512Mi
-    # requests:
-    #   cpu: 500m
-    #   memory: 512Mi
+    requests:
+      cpu: 10m
+      memory: 32Mi
 
   ## Vertical Pod Autoscaler config
   ## Ref: https://github.com/kubernetes/autoscaler/tree/master/vertical-pod-autoscaler
