@@ -18,3 +18,5 @@
 - Cloud Technologien in Practice
 - Microservice Architectures in Practice
 - Kafka
+- GoLang
+- AWS Load Balancer
