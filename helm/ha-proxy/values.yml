@@ -167,7 +167,7 @@ controller:
   logging:
     ## Controller logging level
     ## This only relevant to Controller logs
-    level: info
+    level: debug
 
     ## HAProxy traffic logs
     ## ref: https://github.com/haproxytech/kubernetes-ingress/tree/master/documentation#logging
@@ -205,10 +205,10 @@ controller:
     ## Service nodePorts to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ## If empty, random ports will be used
-    nodePorts: {}
-    #  http: 31080
-    #  https: 31443
-    #  stat: 31024
+    nodePorts:
+      http: 30967
+      https: 31040
+      stat: 32448
 
     ## Service ports to use for http, https and stat
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
