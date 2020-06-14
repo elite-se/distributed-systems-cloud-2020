@@ -15,18 +15,19 @@ class TaxiProducer(val config: TaxiProducerConfig, val datafile: String) {
         val waitTimeBetweenIterationsMs = 1000L / eventsPerSecond
         logger.info("Producing $eventsPerSecond records per second (1 every ${waitTimeBetweenIterationsMs}ms)")
 
+//        producer.initTransactions()
+
         val reader = File(datafile).bufferedReader()
 
         while (reader.ready()) {
             val data = reader.readLine()
-            val result = producer.send(ProducerRecord(topic, data))
+            //          producer.beginTransaction()
+            producer.send(ProducerRecord(topic, data)).get()
+//                    producer.commitTransaction()
             logger.info("Sent record: $data")
 
             // sleep before sending record
             Thread.sleep(waitTimeBetweenIterationsMs)
-
-            // wait for the write acknowledgment
-            result.get()
         }
     }
 }

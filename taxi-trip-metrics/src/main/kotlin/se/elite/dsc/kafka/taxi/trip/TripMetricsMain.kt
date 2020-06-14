@@ -4,7 +4,7 @@ import java.util.concurrent.CountDownLatch
 import kotlin.system.exitProcess
 
 fun main() {
-    val config = TripMetricsConfig("trip-converter-service", "taxi-trip", "cell-profit")
+    val config = TripMetricsConfig("trip-metrics-service", "taxi-trip", "cell-profit")
     val metrics = TripMetrics(config)
     val latch = CountDownLatch(1)
 
