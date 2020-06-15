@@ -19,8 +19,14 @@ func main() {
 	// start server
 	broker := os.Args[1]
 	group := os.Args[2]
+	var port string
+	if len(os.Args) > 3 {
+		port = os.Args[3]
+	} else {
+		port = "3000"
+	}
 	go func() {
-		server.ServeDropoffNofitications(ctx, broker, group)
+		server.ServeDropoffNotifications(ctx, broker, group, ":"+port)
 		doneChan <- true
 	}()
 
