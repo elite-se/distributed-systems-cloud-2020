@@ -45,7 +45,7 @@ resource "google_container_node_pool" "primary_nodes" {
   name       = "dis-sys-pool-1"
   location   = var.zone
   cluster    = google_container_cluster.primary.name
-  node_count = 1
+  node_count = 2
 
   node_config {
     preemptible  = false
