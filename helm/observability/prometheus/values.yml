@@ -348,11 +348,14 @@ configmapReload:
     ## configmap-reload resource requests and limits
     ## Ref: http://kubernetes.io/docs/user-guide/compute-resources/
     ##
-    resources: {}
+    resources:
+      requests:
+        cpu: 1m
+        memory: 32Mi
   alertmanager:
     ## If false, the configmap-reload container will not be deployed
     ##
-    enabled: true
+    enabled: false
 
     ## configmap-reload container name
     ##

@@ -126,7 +126,7 @@ controller:
   #    cpu: 100m
   #    memory: 64Mi
     requests:
-      cpu: 100m
+      cpu: 10m
       memory: 64Mi
 
   ## Pod Node assignment
