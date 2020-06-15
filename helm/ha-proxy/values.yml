@@ -192,7 +192,9 @@ controller:
 
     ## Service annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    annotations: {}
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '1024'
 
     ## Service labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
