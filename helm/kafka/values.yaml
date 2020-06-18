@@ -19,7 +19,6 @@ imagePullPolicy: "IfNotPresent"
 ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 resources:
   limits:
-    cpu: 200m
     memory: 1536Mi
   requests:
     cpu: 100m
