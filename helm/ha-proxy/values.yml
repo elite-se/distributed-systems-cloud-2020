@@ -126,7 +126,7 @@ controller:
   #    cpu: 100m
   #    memory: 64Mi
     requests:
-      cpu: 100m
+      cpu: 10m
       memory: 64Mi
 
   ## Pod Node assignment
@@ -192,7 +192,9 @@ controller:
 
     ## Service annotations
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-    annotations: {}
+    annotations:
+      prometheus.io/scrape: 'true'
+      prometheus.io/port: '1024'
 
     ## Service labels
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/

@@ -37,13 +37,21 @@ class TripConverter(val config: TripConverterConfig) {
 
         val builder = StreamsBuilder()
         builder.stream(config.sourcetopic, Consumed.with(Serdes.String(), Serdes.String()))
+                .filter { _: String?, value: String ->
+                    try {
+                        constructTripFromString(value)
+                        return@filter true
+                    } catch (e: Throwable) {
+                        return@filter false
+                    }
+                }
                 .map { _: String?, value: String ->
                     log.info("Received message:")
                     log.info("\tvalue: {}", value)
                     val trip = constructTripFromString(value)
                     KeyValue(Cell(START_CELL_ORIGIN, CELL_LENGTH, trip.pickupLoc), trip)
                 }
-                .filter { cell: Cell, _: Trip? -> cell.inBounds(Companion.MAX_CLAT, Companion.MAX_CLONG) }
+                .filter { cell: Cell, _: Trip? -> cell.inBounds(MAX_CLAT, MAX_CLONG) }
                 .to(config.sinkTopic, Produced.with(cellSerde, tripSerde))
 
         return KafkaStreams(builder.build(), props)

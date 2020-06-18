@@ -11,6 +11,8 @@ class TaxiProducerConfig(val topic: String) : KafkaConfig() {
         val props = super.createProperties()
         props[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
         props[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
+//        props[ProducerConfig.ENABLE_IDEMPOTENCE_CONFIG] = "true"
+//        props[ProducerConfig.TRANSACTIONAL_ID_CONFIG] = "taxi-producer-transaction"
         return props
     }
 }
