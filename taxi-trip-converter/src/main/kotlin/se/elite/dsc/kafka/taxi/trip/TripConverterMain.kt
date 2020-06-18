@@ -3,7 +3,7 @@ package se.elite.dsc.kafka.taxi.trip
 import java.util.concurrent.CountDownLatch
 import kotlin.system.exitProcess
 
-fun serveDropoffNofitications() {
+fun main() {
     val config = TripConverterConfig("trip-converter-service", "taxi-source", "taxi-trip")
     val converter = TripConverter(config)
     val latch = CountDownLatch(1);
