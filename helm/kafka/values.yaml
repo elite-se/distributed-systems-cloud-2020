@@ -180,7 +180,7 @@ podDisruptionBudget: {}
 configurationOverrides:
   "confluent.support.metrics.enable": false  # Disables confluent metric submission
   # "auto.leader.rebalance.enable": true
-  # "auto.create.topics.enable": true
+  "auto.create.topics.enable": true
   # "controlled.shutdown.enable": true
   # "controlled.shutdown.max.retries": 100
 
@@ -436,10 +436,18 @@ configJob:
 ##
 ## Note: To increase the 'replicationFactor' of a topic, 'reassignPartitions' must be set to true (see above).
 ##
-topics: []
-  # - name: myExistingTopicConfig
-  #   config: "cleanup.policy=compact,delete.retention.ms=604800000"
+topics:
+  - name: taxi-source
+    partitions: 1
+    replications: 1
+  - name: taxi-trip
+    partitions: 1
+    replications: 1
+  - name: cell-profit
+    partitions: 1
+    replications: 1
   # - name: myExistingTopicReassignPartitions
+  #   config: "cleanup.policy=compact,delete.retention.ms=604800000"
   #   partitions: 8
   #   replicationFactor: 5
   #   reassignPartitions: true
