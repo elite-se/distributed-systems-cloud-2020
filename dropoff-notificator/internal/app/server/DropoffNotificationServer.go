@@ -9,7 +9,7 @@ import (
 // ServeDropoffNotifications allows clients to connect via TCP to get informed about dropoffs in a specific cell
 func ServeDropoffNotifications(ctx context.Context, broker string, group string, listenAddress string) {
 	var wg sync.WaitGroup
-	wg.Add(1) // TODO adjust
+	wg.Add(3)
 
 	messageChan := make(chan kafka.Message, 10)
 
@@ -18,12 +18,16 @@ func ServeDropoffNotifications(ctx context.Context, broker string, group string,
 		receiveKafkaMessages(ctx, broker, group, messageChan)
 	}()
 
+	eventBroker := NewDropoffEventBroker(messageChan)
 	go func() {
 		defer wg.Done()
-		ListenForTCPConnects(ctx, listenAddress)
+		eventBroker.startBroking(ctx)
 	}()
 
-	// TODO connect Kafka with TCP server
+	go func() {
+		defer wg.Done()
+		ListenForTCPConnects(ctx, listenAddress, eventBroker)
+	}()
 
 	wg.Wait()
 }
