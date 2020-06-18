@@ -490,6 +490,7 @@ zookeeper:
   env:
     ## The JVM heap size to allocate to Zookeeper
     ZK_HEAP_SIZE: "1G"
+    ZK_REPLICAS: "1"
 
   persistence:
     enabled: false
