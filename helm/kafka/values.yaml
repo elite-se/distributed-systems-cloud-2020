@@ -137,7 +137,7 @@ headless:
 ## External access.
 ##
 external:
-  enabled: false
+  enabled: true
   # type can be either NodePort or LoadBalancer
   type: NodePort
   # annotations:
