@@ -2,6 +2,7 @@
 .gradle/
 gradle/
 build/
+mongo-db/
 gradlew
 gradlew.bat
 *.csv
