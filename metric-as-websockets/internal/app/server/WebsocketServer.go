@@ -23,7 +23,10 @@ func ListenForWSConnects(ctx context.Context, address string, broker MetricMulti
 		}
 		handleWSConnection(ctx, conn, broker)
 	})
-	_ = http.ListenAndServe(address, nil)
+	server := &http.Server{Addr: address}
+	go server.ListenAndServe()
+	<-ctx.Done()
+	_ = server.Shutdown(ctx)
 }
 
 func handleWSConnection(ctx context.Context, conn *websocket.Conn, broker MetricMulticast) {
