@@ -28,14 +28,14 @@ type metricMulticast struct {
 }
 
 func NewMetricMulticast(inputChan chan MetricEvent) MetricMulticast {
-	return metricMulticast{
+	return &metricMulticast{
 		outputChans:  make(map[int]chan MetricEvent),
 		nextHandleId: 0,
 		inputChan:    inputChan,
 	}
 }
 
-func (broker metricMulticast) startBroking(ctx context.Context) {
+func (broker *metricMulticast) startBroking(ctx context.Context) {
 	for {
 		select {
 		case <-ctx.Done():
@@ -44,23 +44,23 @@ func (broker metricMulticast) startBroking(ctx context.Context) {
 			log.Printf("Distributing event: Cell (%v, %v), Value %v\n", msg.Cell.X, msg.Cell.Y, msg.Metric)
 			for _, outputChan := range broker.outputChans {
 				select {
-					case outputChan <- msg:
-						continue
-					default:
-						continue
+				case outputChan <- msg:
+					continue
+				default:
+					continue
 				}
 			}
 		}
 	}
 }
 
-func (broker metricMulticast) register(outputChan chan MetricEvent) int {
+func (broker *metricMulticast) register(outputChan chan MetricEvent) int {
 	handleId := broker.nextHandleId
-	broker.nextHandleId++
+	broker.nextHandleId += 1
 	broker.outputChans[handleId] = outputChan
 	return handleId
 }
 
-func (broker metricMulticast) unregister(handleId int) {
+func (broker *metricMulticast) unregister(handleId int) {
 	delete(broker.outputChans, handleId)
 }
