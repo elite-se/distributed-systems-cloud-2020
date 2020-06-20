@@ -79,12 +79,21 @@ func (broker dropoffEventBrokerImpl) register(cell Cell, infoChan chan float64) 
 }
 
 func (broker dropoffEventBrokerImpl) unregister(handleId int) {
-	for outerIdx, handles := range broker.handles {
-		for idx, handle := range handles {
-			if handle.id == handleId {
-				handles[idx] = handles[len(handles)-1]
-				broker.handles[outerIdx] = handles[:len(handles)-1]
+	findIndices := func() (Cell, int) {
+		for outerIdx, handles := range broker.handles {
+			for idx, handle := range handles {
+				if handle.id == handleId {
+					return outerIdx, idx
+				}
 			}
 		}
+		return Cell{}, -1
 	}
+	outer, inner := findIndices()
+	if inner < 0 {
+		return
+	}
+	handles := broker.handles[outer]
+	handles[inner] = handles[len(handles)-1]
+	broker.handles[outer] = handles[:len(handles)-1]
 }

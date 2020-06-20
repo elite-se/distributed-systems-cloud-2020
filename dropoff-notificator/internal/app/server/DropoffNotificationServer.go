@@ -6,9 +6,9 @@ import (
 )
 
 // ServeDropoffNotifications allows clients to connect via TCP to get informed about dropoffs in a specific cell
-func ServeDropoffNotifications(ctx context.Context, broker string, group string, topic string, listenAddress string) {
+func ServeDropoffNotifications(ctx context.Context, broker string, group string, topic string, wsAddr string, tcpAddr string) {
 	var wg sync.WaitGroup
-	wg.Add(3)
+	wg.Add(4)
 
 	messageChan := make(chan DropoffEvent, 10)
 
@@ -25,7 +25,12 @@ func ServeDropoffNotifications(ctx context.Context, broker string, group string,
 
 	go func() {
 		defer wg.Done()
-		ListenForTCPConnects(ctx, listenAddress, eventBroker)
+		ListenForTCPConnects(ctx, tcpAddr, eventBroker)
+	}()
+
+	go func() {
+		defer wg.Done()
+		ListenForWSConnects(ctx, wsAddr, eventBroker)
 	}()
 
 	wg.Wait()

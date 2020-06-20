@@ -20,14 +20,19 @@ func main() {
 	broker := os.Args[1]
 	group := os.Args[2]
 	topic := os.Args[3]
-	var port string
+	var wsPort, tcpPort string
 	if len(os.Args) > 4 {
-		port = os.Args[4]
+		wsPort = os.Args[4]
+		if len(os.Args) > 5 {
+			tcpPort = os.Args[5]
+		} else {
+			tcpPort = "3000"
+		}
 	} else {
-		port = "3000"
+		wsPort = "8080"
 	}
 	go func() {
-		server.ServeDropoffNotifications(ctx, broker, group, topic, ":"+port)
+		server.ServeDropoffNotifications(ctx, broker, group, topic, ":"+wsPort, ":"+tcpPort)
 		doneChan <- true
 	}()
 

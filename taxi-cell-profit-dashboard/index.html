@@ -152,21 +152,20 @@
 
             // Connection opened
             sockets[i][j].addEventListener('open', function (event) {
-                // TODO send position
-                sockets[i][j].send('Hello Server!');
+                sockets[i][j].send(i);
+                sockets[i][j].send(j);
             });
 
             // Listen for messages
             sockets[i][j].addEventListener('message', function (event) {
                 console.log('Message from server ', event.data);
-/*                let message = event.data;
-                let msg = 'key [' + message.body.key + '] val [' + message.body.value + ']';
+                let message = event.data;
+                let msg = 'key [' + i + ', ' + j + '] val [' + message + ']';
                 $('#messages').prepend('<li>' + msg + '</li>');
 
-                let val = ((message.body.value > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : message.body.value),
-                    js = JSON.parse(message.body.key);
+                let val = ((message > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : message);
 
-                grid[js["clat"] - 1][js["clong"] - 1].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});*/
+                grid[i][j].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
             });
         }
     }
