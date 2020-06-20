@@ -1,0 +1,13 @@
+version: '3.7'
+
+services:
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_DATABASE: qplix
+    ports:
+      - 4040:27017
+    volumes:
+      - ./mongo-db:/data/db
