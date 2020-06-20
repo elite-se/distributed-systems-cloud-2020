@@ -12,7 +12,7 @@ import (
 	"strconv"
 )
 
-func receiveKafkaMessages(ctx context.Context, broker string, group string, topic string, messageChan chan<- DropoffEvent) {
+func receiveKafkaMessages(ctx context.Context, broker string, group string, topic string, messageChan chan<- MetricEvent) {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":     broker,
 		"broker.address.family": "v4",
@@ -55,20 +55,20 @@ func receiveKafkaMessages(ctx context.Context, broker string, group string, topi
 	}
 }
 
-func parseEvent(e *kafka.Message) (DropoffEvent, error) {
+func parseEvent(e *kafka.Message) (MetricEvent, error) {
 	// cell
 	cell, err := parseCell(string(e.Key))
 	if err != nil {
-		return DropoffEvent{}, err
+		return MetricEvent{}, err
 	}
 
 	// metric value
 	bits := binary.BigEndian.Uint64(e.Value)
 	value := math.Float64frombits(bits)
 
-	return DropoffEvent{
-		cell:   cell,
-		metric: value,
+	return MetricEvent{
+		Cell:   cell,
+		Metric: value,
 	}, nil
 }
 
@@ -87,7 +87,7 @@ func parseCell(cellString string) (Cell, error) {
 		return Cell{}, errors.New("invalid x coordinate")
 	}
 	return Cell{
-		x: x,
-		y: y,
+		X: x,
+		Y: y,
 	}, nil
 }

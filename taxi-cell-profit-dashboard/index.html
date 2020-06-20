@@ -143,32 +143,19 @@
         map.addLayer(layer).fitBounds(layer.getBounds());
     });
 
-    sockets = new Array(MAX_CLONG);
-    for (let i = 0; i < MAX_CLONG; i++) {
-        sockets[i] = new Array(MAX_CLAT);
-        for (let j = 0; j < MAX_CLAT; j++) {
-            // Create WebSocket connection.
-            sockets[i][j] = new WebSocket('ws://localhost:8080');
+    socket = new WebSocket('ws://localhost:8080');
+    // Listen for messages
+    socket.addEventListener('message', function (event) {
+        console.log('Message from server ', event.data);
+        let message = event.data;
+        let json = JSON.parse(message);
+        let msg = 'cell [' + json.Cell.X + ', ' + json.Cell.Y + '] val [' + json.Metric + ']';
+        $('#messages').prepend('<li>' + msg + '</li>');
 
-            // Connection opened
-            sockets[i][j].addEventListener('open', function (event) {
-                sockets[i][j].send(i);
-                sockets[i][j].send(j);
-            });
+        let val = ((json.metric > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : json.Metric);
 
-            // Listen for messages
-            sockets[i][j].addEventListener('message', function (event) {
-                console.log('Message from server ', event.data);
-                let message = event.data;
-                let msg = 'key [' + i + ', ' + j + '] val [' + message + ']';
-                $('#messages').prepend('<li>' + msg + '</li>');
-
-                let val = ((message > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : message);
-
-                grid[i][j].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
-            });
-        }
-    }
+        grid[json.Cell.X][json.Cell.Y].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
+    });
 
     /*let eb = new EventBus("http://" + location.host + "/eventbus");
 

@@ -1,4 +1,4 @@
-module github.com/elite-se/distributed-systems-cloud-2020/dropoff-notificator
+module github.com/elite-se/distributed-systems-cloud-2020/metric-as-websocket
 
 go 1.14
 

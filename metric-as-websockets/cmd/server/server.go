@@ -3,7 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
-	"github.com/elite-se/distributed-systems-cloud-2020/dropoff-notificator/internal/app/server"
+	"github.com/elite-se/distributed-systems-cloud-2020/metric-as-websocket/internal/app/server"
 	"os"
 	"os/signal"
 	"syscall"
@@ -20,19 +20,14 @@ func main() {
 	broker := os.Args[1]
 	group := os.Args[2]
 	topic := os.Args[3]
-	var wsPort, tcpPort string
+	var wsPort string
 	if len(os.Args) > 4 {
 		wsPort = os.Args[4]
-		if len(os.Args) > 5 {
-			tcpPort = os.Args[5]
-		} else {
-			tcpPort = "3000"
-		}
 	} else {
 		wsPort = "8080"
 	}
 	go func() {
-		server.ServeDropoffNotifications(ctx, broker, group, topic, ":"+wsPort, ":"+tcpPort)
+		server.ServeMetricNotifications(ctx, broker, group, topic, ":"+wsPort)
 		doneChan <- true
 	}()
 
