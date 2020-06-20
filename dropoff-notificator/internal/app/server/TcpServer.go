@@ -81,11 +81,13 @@ func handleConnection(ctx context.Context, conn *net.TCPConn, broker DropoffEven
 		case metric := <-metricsChan:
 			fmt.Printf("TCP: sending %v\n", metric)
 			_, _ = fmt.Fprintf(rw, "%v\n", metric)
+			_ = rw.Flush()
 		case request := <-requestChan:
 			if strings.ToLower(request) == "quit" {
 				cancel()
 			} else {
 				_, _ = rw.WriteString("Send \"quit\" to quit or shut the f*ck up!\n")
+				_ = rw.Flush()
 			}
 		case <-ctx.Done():
 			return
@@ -100,6 +102,7 @@ func readIntFromClient(ctx context.Context, clientChan chan string, w *bufio.Wri
 			val, err := strconv.Atoi(line)
 			if err != nil {
 				_, _ = w.WriteString("How hard can it be to send a proper int? Try again.\n")
+				_ = w.Flush()
 			} else {
 				return val
 			}
