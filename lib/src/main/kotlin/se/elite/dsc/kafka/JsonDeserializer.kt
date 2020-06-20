@@ -3,7 +3,7 @@ package se.elite.dsc.kafka
 import jsonMapper
 import org.apache.kafka.common.serialization.Deserializer
 
-class JsonDeserializer<T>(val clazz: Class<T>) : Deserializer<T> {
+open class JsonDeserializer<T>(val clazz: Class<T>) : Deserializer<T> {
 
     override fun deserialize(topic: String?, data: ByteArray?): T? {
         if (data == null) return null;
