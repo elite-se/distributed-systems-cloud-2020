@@ -2,12 +2,17 @@ package server
 
 import (
 	"context"
+	"encoding/binary"
+	"errors"
 	"fmt"
 	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"math"
 	"os"
+	"regexp"
+	"strconv"
 )
 
-func receiveKafkaMessages(ctx context.Context, broker string, group string, messageChan chan<- kafka.Message) {
+func receiveKafkaMessages(ctx context.Context, broker string, group string, topic string, messageChan chan<- DropoffEvent) {
 	c, err := kafka.NewConsumer(&kafka.ConfigMap{
 		"bootstrap.servers":     broker,
 		"broker.address.family": "v4",
@@ -21,7 +26,7 @@ func receiveKafkaMessages(ctx context.Context, broker string, group string, mess
 	//noinspection GoUnhandledErrorResult
 	defer c.Close()
 
-	err = c.Subscribe("<the topics>" /* TODO find out which topics to use */, nil)
+	err = c.Subscribe(topic, nil)
 
 	for {
 		select {
@@ -35,7 +40,12 @@ func receiveKafkaMessages(ctx context.Context, broker string, group string, mess
 
 			switch e := ev.(type) {
 			case *kafka.Message:
-				messageChan <- *e
+				event, err := parseEvent(e)
+				if err != nil {
+					fmt.Fprintf(os.Stderr, "Failed to parse message: %v\n", err)
+				} else {
+					messageChan <- event
+				}
 			case kafka.Error:
 				fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
 			default:
@@ -43,4 +53,41 @@ func receiveKafkaMessages(ctx context.Context, broker string, group string, mess
 			}
 		}
 	}
+}
+
+func parseEvent(e *kafka.Message) (DropoffEvent, error) {
+	// cell
+	cell, err := parseCell(string(e.Key))
+	if err != nil {
+		return DropoffEvent{}, err
+	}
+
+	// metric value
+	bits := binary.BigEndian.Uint64(e.Value)
+	value := math.Float64frombits(bits)
+
+	return DropoffEvent{
+		cell:   cell,
+		metric: value,
+	}, nil
+}
+
+func parseCell(cellString string) (Cell, error) {
+	var cellMatcher = regexp.MustCompile(`^{"clat":([0-9]+),"clong":([0-9]+)}$`)
+	cell := cellMatcher.FindStringSubmatch(cellString)
+	if cell == nil {
+		return Cell{}, errors.New("key was no proper cell")
+	}
+	x, err := strconv.Atoi(cell[1])
+	if err != nil {
+		return Cell{}, errors.New("invalid x coordinate")
+	}
+	y, err := strconv.Atoi(cell[2])
+	if err != nil {
+		return Cell{}, errors.New("invalid x coordinate")
+	}
+	return Cell{
+		x: x,
+		y: y,
+	}, nil
 }

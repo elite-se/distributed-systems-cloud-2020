@@ -2,33 +2,39 @@ package server
 
 import (
 	"context"
-	"github.com/confluentinc/confluent-kafka-go/kafka"
+	"fmt"
 )
 
+type Cell struct {
+	x int
+	y int
+}
+
 type DropoffEvent struct {
-	msg string // TODO put real data here
+	cell   Cell
+	metric float64
 }
 
 type DropoffEventBroker interface {
-	register(request string, infoChan chan DropoffEvent) int
+	register(cell Cell, infoChan chan float64) int
 	unregister(handle int)
 	startBroking(ctx context.Context)
 }
 
 type handle struct {
 	id       int
-	infoChan chan DropoffEvent
+	infoChan chan float64
 }
 
 type dropoffEventBrokerImpl struct {
-	handles      map[string][]handle
+	handles      map[Cell][]handle
 	nextHandleId int
-	inputChan    chan kafka.Message
+	inputChan    chan DropoffEvent
 }
 
-func NewDropoffEventBroker(inputChan chan kafka.Message) DropoffEventBroker {
+func NewDropoffEventBroker(inputChan chan DropoffEvent) DropoffEventBroker {
 	return dropoffEventBrokerImpl{
-		handles:      make(map[string][]handle),
+		handles:      make(map[Cell][]handle),
 		nextHandleId: 0,
 		inputChan:    inputChan,
 	}
@@ -40,12 +46,13 @@ func (broker dropoffEventBrokerImpl) startBroking(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case msg := <-broker.inputChan:
-			key := string(msg.Value)[:4] // TODO find real key
+			fmt.Printf("Broker: Cell (%v, %v), Value %v\n", msg.cell.x, msg.cell.y, msg.metric)
+			key := msg.cell
 			handles := broker.handles[key]
 			if handles != nil {
 				for _, handle := range handles {
 					select {
-					case handle.infoChan <- DropoffEvent{msg: string(msg.Value)}:
+					case handle.infoChan <- msg.metric:
 						continue
 					default:
 						continue
@@ -56,8 +63,8 @@ func (broker dropoffEventBrokerImpl) startBroking(ctx context.Context) {
 	}
 }
 
-func (broker dropoffEventBrokerImpl) register(request string, infoChan chan DropoffEvent) int {
-	handles := broker.handles[request]
+func (broker dropoffEventBrokerImpl) register(cell Cell, infoChan chan float64) int {
+	handles := broker.handles[cell]
 	if handles == nil {
 		handles = make([]handle, 1)
 	}
@@ -67,7 +74,7 @@ func (broker dropoffEventBrokerImpl) register(request string, infoChan chan Drop
 		id:       handleId,
 		infoChan: infoChan,
 	})
-	broker.handles[request] = handles
+	broker.handles[cell] = handles
 	return handleId
 }
 
