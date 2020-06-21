@@ -143,21 +143,23 @@
         map.addLayer(layer).fitBounds(layer.getBounds());
     });
 
-    const socket = new WebSocket('ws://localhost:8080');
-    // Listen for messages
-    socket.addEventListener('message', function (event) {
-        console.log('Message from server ', event.data);
-        let message = event.data;
-        let json = JSON.parse(message);
-        const x = json.Cell.X;
-        const y = json.Cell.Y;
-        const metric = json.Metric;
-        let msg = 'cell [' + x + ', ' + y + '] val [' + metric + ']';
-        $('#messages').prepend('<li>' + msg + '</li>');
+    $(function() {
+        const socket = new WebSocket('ws://localhost:8080');
+        // Listen for messages
+        socket.addEventListener('message', function (event) {
+            console.log('Message from server ', event.data);
+            let message = event.data;
+            let json = JSON.parse(message);
+            const x = json.Cell.X;
+            const y = json.Cell.Y;
+            const metric = json.Metric;
+            let msg = 'cell [' + x + ', ' + y + '] val [' + metric + ']';
+            $('#messages').prepend('<li>' + msg + '</li>');
 
-        let val = ((metric > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : metric);
+            let val = ((metric > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : metric);
 
-        grid[x][y].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
+            grid[x][y].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
+        });
     });
 
     /*let eb = new EventBus("http://" + location.host + "/eventbus");
