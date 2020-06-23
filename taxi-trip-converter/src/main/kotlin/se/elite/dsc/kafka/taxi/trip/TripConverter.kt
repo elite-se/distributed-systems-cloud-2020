@@ -46,7 +46,6 @@ class TripConverter(val config: TripConverterConfig) {
                     }
                 }
                 .map { _: String?, value: String ->
-                    log.info("Received message:")
                     log.info("\tvalue: {}", value)
                     val trip = constructTripFromString(value)
                     KeyValue(Cell(START_CELL_ORIGIN, CELL_LENGTH, trip.pickupLoc), trip)
