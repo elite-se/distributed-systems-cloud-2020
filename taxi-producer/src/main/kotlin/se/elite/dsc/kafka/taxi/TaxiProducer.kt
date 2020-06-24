@@ -2,32 +2,36 @@ package se.elite.dsc.kafka.taxi
 
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.apache.kafka.clients.producer.ProducerRecord
-import org.apache.log4j.LogManager
 import java.io.File
 
-class TaxiProducer(val config: TaxiProducerConfig, val datafile: String) {
+class TaxiProducer(val config: TaxiProducerConfig, val datafile: String, var eventsPerSecond: Int) {
 
     private val topic = config.topic
-    private val logger = LogManager.getLogger(javaClass)
     private val producer = KafkaProducer<String, String>(config.createProperties())
 
-    fun produce(eventsPerSecond: Int) {
-        val waitTimeBetweenIterationsMs = 1000L / eventsPerSecond
-        logger.info("Producing $eventsPerSecond records per second (1 every ${waitTimeBetweenIterationsMs}ms)")
-
-//        producer.initTransactions()
-
+    fun produce() {
         val reader = File(datafile).bufferedReader()
 
         while (reader.ready()) {
-            val data = reader.readLine()
-            //          producer.beginTransaction()
-            producer.send(ProducerRecord(topic, data)).get()
-//                    producer.commitTransaction()
-            logger.info("Sent record: $data")
+            val startTime = System.currentTimeMillis()
+            for (x in 0 until eventsPerSecond) {
+                if (!reader.ready()) {
+                    break
+                }
+                val data = reader.readLine()
+                producer.send(ProducerRecord(topic, data))
+            }
 
-            // sleep before sending record
-            Thread.sleep(waitTimeBetweenIterationsMs)
+            val endTime = System.currentTimeMillis()
+            if (startTime + 1000 > endTime) {
+                Thread.sleep(1000 - (endTime - startTime))
+            }
         }
+        println("no events left")
+        producer.close()
+    }
+
+    fun close() {
+        producer.close()
     }
 }
