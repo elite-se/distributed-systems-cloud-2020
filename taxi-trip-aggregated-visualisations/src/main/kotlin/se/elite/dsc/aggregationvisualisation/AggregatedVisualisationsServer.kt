@@ -6,6 +6,14 @@ import java.net.InetSocketAddress
 import kotlinx.html.*
 import kotlinx.html.dom.*
 import org.slf4j.LoggerFactory
+import se.elite.dsc.kafka.taxi.Cell
+import se.elite.dsc.mongo.taxi.Profit
+import se.elite.dsc.mongo.taxi.ProfitRepository
+import java.text.SimpleDateFormat
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+
+fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
 private fun HttpExchange.sendResponse(code: Int, answer: ByteArray) = run {
     sendResponseHeaders(code, answer.size.toLong())
@@ -21,9 +29,7 @@ data class TaxiTrip(
 )
 
 data class ViewModel(
-        val startDate: String,
-        val endDate: String,
-        val trips: List<TaxiTrip>
+        val profits: List<Profit>
 )
 
 class AggregatedVisualisationsServer(private val port: Int) {
@@ -40,55 +46,100 @@ class AggregatedVisualisationsServer(private val port: Int) {
                     return@run
                 }
 
-                /* TODO: populate viewModel from MongoDB */
+                val profitsOneMonth = ProfitRepository.retrieveTopTenCells(31)
+                println("Retrieved cell from mongo")
+                print(profitsOneMonth)
 
-                val viewModel = ViewModel(
-                        "01.01.2013",
-                        "31.12.2013",
-                        listOf(
-                                TaxiTrip("#1234", "1st Street", "5th Avenue"),
-                                TaxiTrip("#3415", "1st Street", "5th Avenue"),
-                                TaxiTrip("#8261", "1st Street", "5th Avenue"),
-                                TaxiTrip("#2134", "1st Street", "5th Avenue"),
-                                TaxiTrip("#3018", "1st Street", "5th Avenue")
-                        )
-                )
-                val outputHTML = createHTMLDocument().body {
-                    div {
-                        h1 {
-                            +"Taxi Trips from ${viewModel.startDate} until ${viewModel.endDate}"
-                        }
-                        table {
-                            thead {
-                                tr {
-                                    th {
-                                        +"TaxiId"
-                                    }
-                                    th {
-                                        +"Start"
-                                    }
-                                    th {
-                                        +"Destination"
-                                    }
-                                }
+                val viewModel = ViewModel(profitsOneMonth)
+                val sdf = SimpleDateFormat("dd/M/yyyy")
+
+                val outputHTML = createHTMLDocument().html {
+                    head {
+                        style {
+                            unsafe {
+                                raw("""
+                                table {
+                                		font-family: verdana, arial, sans-serif;
+                                		font-size: 11px;
+                                		color: #333333;
+                                		border-width: 1px;
+                                		border-color: #3A3A3A;
+                                		border-collapse: collapse;
+                                	}
+                                 
+                                	table th {
+                                		border-width: 1px;
+                                		padding: 8px;
+                                		border-style: solid;
+                                		border-color: #517994;
+                                		background-color: #B2CFD8;
+                                	}
+                                 
+                                	table tr:hover td {
+                                		background-color: #DFEBF1;
+                                	}
+                                 
+                                	table td {
+                                		border-width: 1px;
+                                		padding: 8px;
+                                		border-style: solid;
+                                		border-color: #517994;
+                                		background-color: #ffffff;
+                                	}
+                            """.trimIndent())
                             }
-                            tbody {
-                                for (trip in viewModel.trips) {
+                        }
+                    }
+
+                    body {
+                        div {
+                            h1 {
+                                +"Taxi Trips"
+                            }
+                            table {
+                                thead {
                                     tr {
-                                        td {
-                                            +trip.taxiId
+                                        th {
+                                            +"Date"
                                         }
-                                        td {
-                                            +trip.start
+                                        th {
+                                            +"Cell"
                                         }
-                                        td {
-                                            +trip.destination
+                                        th {
+                                            +"# Trips"
+                                        }
+                                        th {
+                                            +"Fare Sum"
+                                        }
+                                        th {
+                                            +"Tip Sum"
+                                        }
+                                    }
+                                }
+                                tbody {
+                                    for (trip in viewModel.profits) {
+                                        tr {
+                                            td {
+                                                +("" + LocalDate.ofYearDay(2013, trip.dayOfYear).format(DateTimeFormatter.ofPattern("dd-MMM-yy")))
+                                            }
+                                            td {
+                                                +("(" + trip.cell.clat + ", " + trip.cell.clong + ")")
+                                            }
+                                            td {
+                                                +("" + trip.tripCount)
+                                            }
+                                            td {
+                                                +moneyString(trip.fareSum)
+                                            }
+                                            td {
+                                                +moneyString(trip.tipSum)
+                                            }
                                         }
                                     }
                                 }
                             }
-                        }
 
+                        }
                     }
                 }
 
@@ -98,6 +149,10 @@ class AggregatedVisualisationsServer(private val port: Int) {
     }
 
     private var listening: Boolean = false;
+
+    private fun moneyString(amount: Double): String {
+        return if (amount > 0) (amount.format(2) + "$") else "--"
+    }
 
     fun listen() {
         if (!listening) {

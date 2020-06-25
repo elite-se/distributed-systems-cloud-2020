@@ -1,5 +1,6 @@
 package se.elite.dsc.mongo.taxi
 
+import com.mongodb.client.FindIterable
 import com.mongodb.client.model.UpdateOptions
 import org.litote.kmongo.*
 import se.elite.dsc.kafka.taxi.Cell
@@ -22,5 +23,16 @@ object ProfitRepository {
         profitData.tipSum += tipAmount
 
         collection.updateOne(filter, profitData, UpdateOptions().upsert(true))
+    }
+
+    fun retrieveCellInfoForOneMonth(tripDayOfYear: Int): List<Profit> {
+        val filter = and(Profit::dayOfYear lt tripDayOfYear)
+        val found = collection.find(filter)
+        return found.toList()
+    }
+
+    fun retrieveTopTenCells(tripDayOfYear: Int): List<Profit> {
+        val found = collection.aggregate<Profit>(match(Profit::dayOfYear lt tripDayOfYear), sort(descending(Profit::fareSum)), limit(10))
+        return found.toList()
     }
 }
