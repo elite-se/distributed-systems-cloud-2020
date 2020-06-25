@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: metrics-as-websocket
+  namespace: default
+spec:
+  selector:
+    deploy: metrics-as-websocket
+  ports:
+  - port: 80
+    targetPort: 80
