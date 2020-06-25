@@ -9,8 +9,13 @@ plugins {
     kotlin("jvm")
     idea
     application
+    java
+    id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
+application {
+    mainClassName = "se.elite.dsc.kafka.taxi.trip.TripMetricsMainKt"
+}
 
 dependencies {
     implementation(kotlin("stdlib"))
@@ -21,4 +26,3 @@ dependencies {
     implementation("org.slf4j:slf4j-log4j12:1.7.25")
     implementation(project(":lib"))
 }
-
