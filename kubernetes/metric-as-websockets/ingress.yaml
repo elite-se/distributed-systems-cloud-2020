@@ -6,7 +6,7 @@ metadata:
 spec:
   rules:
   - host: maw.cloud.elite-se.xyz
-  http:
+    http:
       paths:
       - path: /
         backend:
