@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"log"
+	"sync"
 )
 
 type Cell struct {
@@ -19,14 +20,14 @@ type MetricMulticast interface {
 	register(outputChan chan MetricEvent) int
 	unregister(handle int)
 	startBroking(ctx context.Context)
-	getCachedMetrics() map[Cell]float64
+	getCachedMetrics() *sync.Map
 }
 
 type metricMulticast struct {
 	outputChans   map[int]chan MetricEvent
 	nextHandleId  int
 	inputChan     chan MetricEvent
-	cachedMetrics map[Cell]float64
+	cachedMetrics sync.Map
 }
 
 func NewMetricMulticast(inputChan chan MetricEvent) MetricMulticast {
@@ -34,7 +35,7 @@ func NewMetricMulticast(inputChan chan MetricEvent) MetricMulticast {
 		outputChans:   make(map[int]chan MetricEvent),
 		nextHandleId:  0,
 		inputChan:     inputChan,
-		cachedMetrics: make(map[Cell]float64),
+		cachedMetrics: sync.Map{},
 	}
 }
 
@@ -47,8 +48,12 @@ func (broker *metricMulticast) startBroking(ctx context.Context) {
 			log.Printf("Processing event: Cell (%v, %v), Value %v\n", msg.Cell.X, msg.Cell.Y, msg.Metric)
 
 			// cache value
-			broker.cachedMetrics[msg.Cell] = msg.Metric
-			SetCacheCount(len(broker.cachedMetrics))
+			_, alreadyExisted := broker.cachedMetrics.LoadOrStore(msg.Cell, msg.Metric)
+			if alreadyExisted {
+				broker.cachedMetrics.Store(msg.Cell, msg.Metric)
+			} else {
+				RegisterNewCachedCell()
+			}
 
 			// distribute event
 			for _, outputChan := range broker.outputChans {
@@ -75,6 +80,6 @@ func (broker *metricMulticast) unregister(handleId int) {
 	delete(broker.outputChans, handleId)
 }
 
-func (broker *metricMulticast) getCachedMetrics() map[Cell]float64 {
-	return broker.cachedMetrics
+func (broker *metricMulticast) getCachedMetrics() *sync.Map {
+	return &broker.cachedMetrics
 }

@@ -31,8 +31,8 @@ func RegisterConnectionClosed() {
 	connectionsOpen.Dec()
 }
 
-func SetCacheCount(val int) {
-	cacheCount.Set(float64(val))
+func RegisterNewCachedCell() {
+	cacheCount.Inc()
 }
 
 var (
