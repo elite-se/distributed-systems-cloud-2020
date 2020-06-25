@@ -44,8 +44,13 @@ func (broker *metricMulticast) startBroking(ctx context.Context) {
 		case <-ctx.Done():
 			return
 		case msg := <-broker.inputChan:
-			log.Printf("Distributing event: Cell (%v, %v), Value %v\n", msg.Cell.X, msg.Cell.Y, msg.Metric)
+			log.Printf("Processing event: Cell (%v, %v), Value %v\n", msg.Cell.X, msg.Cell.Y, msg.Metric)
+
+			// cache value
 			broker.cachedMetrics[msg.Cell] = msg.Metric
+			SetCacheCount(len(broker.cachedMetrics))
+
+			// distribute event
 			for _, outputChan := range broker.outputChans {
 				select {
 				case outputChan <- msg:
@@ -54,6 +59,7 @@ func (broker *metricMulticast) startBroking(ctx context.Context) {
 					continue
 				}
 			}
+			RegisterProcessedMessage()
 		}
 	}
 }
