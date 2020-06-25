@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taxi-trip-converter
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: taxi-trip-converter
+
+  template:
+    metadata:
+      labels:
+        app: taxi-trip-converter
+    spec:
+      containers:
+        - name: taxi-trip-converter
+          image: gcr.io/distributed-systems-279515/taxi-trip-converter:1

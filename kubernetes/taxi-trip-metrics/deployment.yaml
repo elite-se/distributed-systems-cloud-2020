@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: taxi-trip-metrics
+
+spec:
+  replicas: 2
+
+  selector:
+    matchLabels:
+      app: taxi-trip-metrics
+
+  template:
+    metadata:
+      labels:
+        app: taxi-trip-metrics
+    spec:
+      containers:
+        - name: taxi-trip-metrics
+          image: gcr.io/distributed-systems-279515/taxi-trip-metrics:1

@@ -46,8 +46,8 @@ class TripConverter(val config: TripConverterConfig) {
                     }
                 }
                 .map { _: String?, value: String ->
-                    log.info("Received message:")
                     log.info("\tvalue: {}", value)
+                    Thread.sleep(2)
                     val trip = constructTripFromString(value)
                     KeyValue(Cell(START_CELL_ORIGIN, CELL_LENGTH, trip.pickupLoc), trip)
                 }
@@ -70,23 +70,14 @@ class TripConverter(val config: TripConverterConfig) {
         val format = SimpleDateFormat("yyyy-MM-dd H:m:s")
 
         return Trip(
-                elements[fieldsMap.getValue(TripFields.MEDALLION)],
-                elements[fieldsMap.getValue(TripFields.HACK_LICENSE)],
                 format.parse(elements[fieldsMap.getValue(TripFields.PICKUP_DATETIME)]),
                 format.parse(elements[fieldsMap.getValue(TripFields.DROPOFF_DATETIME)]),
-                elements[fieldsMap.getValue(TripFields.TRIP_TIME)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.TRIP_DISTANCE)].toDouble(),
                 Location(elements[fieldsMap.getValue(TripFields.PICKUP_LATITUDE)].toDouble(),
                         elements[fieldsMap.getValue(TripFields.PICKUP_LONGITUDE)].toDouble()),
                 Location(elements[fieldsMap.getValue(TripFields.DROPOFF_LATITUDE)].toDouble(),
                         elements[fieldsMap.getValue(TripFields.DROPOFF_LONGITUDE)].toDouble()),
-                if (elements[fieldsMap.getValue(TripFields.PAYMENT_TYPE)] == "CSH") Trip.PaymentType.CSH else Trip.PaymentType.CRD,
                 elements[fieldsMap.getValue(TripFields.FARE_AMOUNT)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.SURCHARGE)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.MTA_TAX)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.TIP_AMOUNT)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.TOLLS_AMOUNT)].toDouble(),
-                elements[fieldsMap.getValue(TripFields.TOTAL_AMOUNT)].toDouble())
+                elements[fieldsMap.getValue(TripFields.TIP_AMOUNT)].toDouble())
     }
 
     companion object {

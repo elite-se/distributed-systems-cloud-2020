@@ -608,7 +608,7 @@ server:
   global:
     ## How frequently to scrape targets by default
     ##
-    scrape_interval: 30s
+    scrape_interval: 10s
     ## How long until a scrape request times out
     ##
     scrape_timeout: 10s
@@ -672,7 +672,7 @@ server:
   ingress:
     ## If true, Prometheus server Ingress will be created
     ##
-    enabled: false
+    enabled: true
 
     ## Prometheus server Ingress annotations
     ##
@@ -687,8 +687,8 @@ server:
     ## Prometheus server Ingress hostnames with optional path
     ## Must be provided if Ingress is enabled
     ##
-    hosts: []
-    #   - prometheus.domain.com
+    hosts:
+      - prometheus.cloud.elite-se.xyz
     #   - domain.com/prometheus
 
     ## Extra paths to prepend to every host configuration. This is useful when working with annotation based services.
