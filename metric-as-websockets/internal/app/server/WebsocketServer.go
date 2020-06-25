@@ -42,15 +42,16 @@ func handleWSConnection(ctx context.Context, conn *websocket.Conn, broker Metric
 	RegisterConnectionOpened()
 
 	// send cached metrics
-	for cell, metric := range broker.getCachedMetrics() {
+	broker.getCachedMetrics().Range(func(key, value interface{}) bool {
 		err := sendEvent(conn, MetricEvent{
-			Cell:   cell,
-			Metric: metric,
+			Cell:   key.(Cell),
+			Metric: value.(float64),
 		})
 		if err != nil {
-			return
+			return false
 		}
-	}
+		return true
+	})
 
 	// send info whenever there is one
 	eventsChan := make(chan MetricEvent, 3)
