@@ -13,6 +13,10 @@
 - Microservices and other services can be deployed in the cluster (using configuration files)
 - The participating teams exchange data to make the demonstration more interesting
 
+**The Relationships in Detail**:
+
+![TaxiProxyGo](https://user-images.githubusercontent.com/16650999/85385333-75f9de00-b542-11ea-94b2-7f47f38bd6d7.jpg)
+
 ## Teams
 
 - Cloud Technologien in Practice

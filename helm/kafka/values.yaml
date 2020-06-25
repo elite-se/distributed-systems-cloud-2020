@@ -3,7 +3,7 @@
 # ------------------------------------------------------------------------------
 
 ## The StatefulSet installs 3 pods by default
-replicas: 1
+replicas: 2
 
 ## The kafka image repository
 image: "confluentinc/cp-kafka"
@@ -195,7 +195,7 @@ configurationOverrides:
   ## Setting "advertised.listeners" here appends to "PLAINTEXT://${POD_IP}:9092,", ensure you update the domain
   ## If external service type is Nodeport:
   "advertised.listeners": |-
-    EXTERNAL://34.91.21.72:$((31090 + ${KAFKA_BROKER_ID}))
+    EXTERNAL://kafka.cloud.elite-se.xyz:$((31090 + ${KAFKA_BROKER_ID}))
   ## If external service type is LoadBalancer and distinct is true:
   # "advertised.listeners": |-
   #   EXTERNAL://kafka-$((${KAFKA_BROKER_ID})).cluster.local:19092
@@ -441,11 +441,17 @@ configJob:
 ##
 topics:
   - name: taxi-source
-    partitions: 1
+    partitions: 4
+    replicationFactor: 1
+    config: "delete.retention.ms=36000000"
   - name: taxi-trip
-    partitions: 1
+    partitions: 2
+    replicationFactor: 1
+    config: "delete.retention.ms=36000000"
   - name: cell-profit
     partitions: 1
+    replicationFactor: 1
+    config: "log.cleanup.policy=compact"
   # - name: myExistingTopicReassignPartitions
   #   config: "cleanup.policy=compact,delete.retention.ms=604800000"
   #   partitions: 8
