@@ -52,20 +52,6 @@
 </head>
 <body>
 
-<nav class="navbar navbar-default navbar-pf" role="navigation">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse-11">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand" href="/">
-            <img src="dist/img/brand.svg" alt="PatternFly Enterprise Application"/>
-        </a>
-    </div>
-</nav>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-8 col-md-9">
@@ -143,7 +129,7 @@
         map.addLayer(layer).fitBounds(layer.getBounds());
     });
 
-    $(function() {
+    $(function () {
         const socket = new WebSocket('ws://maw.cloud.elite-se.xyz:30967');
         // Listen for messages
         socket.addEventListener('message', function (event) {
@@ -153,55 +139,17 @@
             const x = json.Cell.X;
             const y = json.Cell.Y;
             const metric = json.Metric;
+            const listItems = $('#messages').children()
             let msg = 'cell [' + x + ', ' + y + '] val [' + metric + ']';
             $('#messages').prepend('<li>' + msg + '</li>');
+            if (listItems.length > 100) {
+                listItems[listItems.length - 1].remove()
+            }
 
             let val = ((metric > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : metric);
 
             grid[x][y].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
         });
-    });
-
-    /*let eb = new EventBus("http://" + location.host + "/eventbus");
-
-    eb.onopen = function () {
-
-        // handler for getting messages to show in the dashboard
-        eb.registerHandler("dashboard", function (error, message) {
-
-            let msg = 'key [' + message.body.key + '] val [' + message.body.value + ']';
-            $('#messages').prepend('<li>' + msg + '</li>');
-
-            let val = ((message.body.value > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC : message.body.value),
-                js = JSON.parse(message.body.key);
-
-            grid[js["clat"] - 1][js["clong"] - 1].setStyle({fillOpacity: val / HIGH_PROFIT_METRIC});
-
-        });
-
-        // handler for getting Kafka consumer status
-        eb.registerHandler("status", function (error, message) {
-            $('#status').text(message.body);
-        });
-
-        // asking for Kafka consumer status on startup
-        eb.publish("config", "status");
-    };*/
-
-    /*$('#seekToBegin').click(function () {
-        $('#messages').empty();
-        eb.publish("config", "seektobegin");
-    });*/
-
-    $('#seek').click(function () {
-        $('#messages').empty();
-
-        let offset = $('#offset').val(),
-            headers = {
-                "offset": offset
-            };
-
-        eb.publish("config", "seek", headers);
     });
 
     $('#clean').click(function () {
