@@ -17,4 +17,4 @@ spec:
     spec:
       containers:
         - name: metrics-as-websocket
-          image: gcr.io/distributed-systems-279515/metric-as-websockets:1
+          image: gcr.io/distributed-systems-279515/metric-as-websockets:2
