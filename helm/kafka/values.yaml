@@ -443,11 +443,11 @@ topics:
   - name: taxi-source
     partitions: 4
     replicationFactor: 1
-    config: "delete.retention.ms=36000000"
+    config: "cleanup.policy=delete,delete.retention.ms=3600000"
   - name: taxi-trip
     partitions: 2
     replicationFactor: 1
-    config: "delete.retention.ms=36000000"
+    config: "cleanup.policy=delete,delete.retention.ms=3600000"
   - name: cell-profit
     partitions: 1
     replicationFactor: 1
