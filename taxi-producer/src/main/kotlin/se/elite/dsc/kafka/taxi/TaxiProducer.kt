@@ -13,18 +13,26 @@ class TaxiProducer(val config: TaxiProducerConfig, val datafile: String, var eve
         val reader = File(datafile).bufferedReader()
 
         while (reader.ready()) {
-            val startTime = System.currentTimeMillis()
-            for (x in 0 until eventsPerSecond) {
+            for (i in 0 until 10) {
+                val startTime = System.currentTimeMillis()
+                for (j in 0 until eventsPerSecond / 10 - 1) {
+                    if (!reader.ready()) {
+                        break
+                    }
+                    val data = reader.readLine()
+                    producer.send(ProducerRecord(topic, data))
+                }
+
                 if (!reader.ready()) {
                     break
                 }
                 val data = reader.readLine()
-                producer.send(ProducerRecord(topic, data))
-            }
+                producer.send(ProducerRecord(topic, data)).get()
 
-            val endTime = System.currentTimeMillis()
-            if (startTime + 1000 > endTime) {
-                Thread.sleep(1000 - (endTime - startTime))
+                val endTime = System.currentTimeMillis()
+                if (startTime + 100 > endTime) {
+                    Thread.sleep(100 - (endTime - startTime))
+                }
             }
         }
         println("no events left")
