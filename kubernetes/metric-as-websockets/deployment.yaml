@@ -10,11 +10,11 @@ spec:
     matchLabels:
       deploy: metrics-as-websocket
 
-template:
-  metadata:
-    labels:
-      deploy: metrics-as-websocket
-  spec:
-    containers:
-      - name: metrics-as-websocket
-        image: gcr.io/distributed-systems-279515/metric-as-websockets:1
+  template:
+    metadata:
+      labels:
+        deploy: metrics-as-websocket
+    spec:
+      containers:
+        - name: metrics-as-websocket
+          image: gcr.io/distributed-systems-279515/metric-as-websockets:1
