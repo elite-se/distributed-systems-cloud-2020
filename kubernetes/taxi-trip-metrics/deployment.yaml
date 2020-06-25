@@ -17,4 +17,4 @@ spec:
     spec:
       containers:
         - name: taxi-trip-metrics
-          app: gcr.io/distributedu-systems-279515/taxi-trip-metrics:1
+          image: gcr.io/distributedu-systems-279515/taxi-trip-metrics:1

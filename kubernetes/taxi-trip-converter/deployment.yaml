@@ -17,4 +17,4 @@ spec:
     spec:
       containers:
         - name: taxi-trip-converter
-          app: gcr.io/distributed-systems-279515/taxi-trip-converter:1
+          image: gcr.io/distributed-systems-279515/taxi-trip-converter:1
