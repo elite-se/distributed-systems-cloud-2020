@@ -30,14 +30,26 @@ func ListenForWSConnects(ctx context.Context, address string, broker MetricMulti
 }
 
 func handleWSConnection(ctx context.Context, conn *websocket.Conn, broker MetricMulticast) {
-	defer conn.Close()
+	defer func() {
+		err := conn.Close()
+		if err != nil {
+			log.Println(err)
+		} else {
+			log.Println("Closed connection")
+		}
+		RegisterConnectionClosed()
+	}()
+	RegisterConnectionOpened()
 
 	// send cached metrics
 	for cell, metric := range broker.getCachedMetrics() {
-		sendEvent(conn, MetricEvent{
+		err := sendEvent(conn, MetricEvent{
 			Cell:   cell,
 			Metric: metric,
 		})
+		if err != nil {
+			return
+		}
 	}
 
 	// send info whenever there is one
@@ -48,18 +60,22 @@ func handleWSConnection(ctx context.Context, conn *websocket.Conn, broker Metric
 	for {
 		select {
 		case event := <-eventsChan:
-			sendEvent(conn, event)
+			err := sendEvent(conn, event)
+			if err != nil {
+				return
+			}
 		case <-ctx.Done():
 			return
 		}
 	}
 }
 
-func sendEvent(conn *websocket.Conn, event MetricEvent) {
+func sendEvent(conn *websocket.Conn, event MetricEvent) error {
 	bytes, err := json.Marshal(event)
 	if err != nil {
 		log.Println(err)
 	} else {
-		_ = conn.WriteMessage(websocket.TextMessage, bytes)
+		return conn.WriteMessage(websocket.TextMessage, bytes)
 	}
+	return nil
 }
