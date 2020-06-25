@@ -179,7 +179,7 @@ podDisruptionBudget: {}
 configurationOverrides:
   "confluent.support.metrics.enable": false  # Disables confluent metric submission
   # "auto.leader.rebalance.enable": true
-  "auto.create.topics.enable": true
+  "auto.create.topics.enable": false
   # "controlled.shutdown.enable": true
   # "controlled.shutdown.max.retries": 100
 
