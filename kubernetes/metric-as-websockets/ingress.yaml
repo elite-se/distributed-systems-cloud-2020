@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: maw-ingress
+  namespace: default
+spec:
+  rules:
+  - host: maw.cloud.elite-se.xyz
+  http:
+      paths:
+      - path: /
+        backend:
+          serviceName: metrics-as-websocket
+          servicePort: 80
