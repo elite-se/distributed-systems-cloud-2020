@@ -24,3 +24,15 @@
 - Kafka
 - GoLang
 - AWS Load Balancer
+
+## Setup
+
+### Build docker containers
+
+1. taxi-trip-converter: `docker build -f taxi-trip-converter/Dockerfile -t taxi-trip-converter .`
+2. taxi-trip-metrics: `docker build -f taxi-trip-metrics/Dockerfile -t taxi-trip-metrics .`
+
+### Start docker containers
+
+1. taxi-trip-converter: `docker run --name taxi-trip-converter taxi-trip-converter .`
+2. taxi-trip-metrics: `docker run --name taxi-trip-metrics taxi-trip-metrics .`

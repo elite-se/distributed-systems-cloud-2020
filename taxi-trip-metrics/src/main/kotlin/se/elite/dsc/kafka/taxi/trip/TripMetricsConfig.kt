@@ -13,7 +13,7 @@ class TripMetricsConfig(val groupId: String, val sourcetopic: String, val sinkTo
         props[ConsumerConfig.AUTO_OFFSET_RESET_CONFIG] = "earliest"
         props[ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG] = "false"
         props[StreamsConfig.CACHE_MAX_BYTES_BUFFERING_CONFIG] = 1024 * 1024L // 1 MiByte
-        props[StreamsConfig.COMMIT_INTERVAL_MS_CONFIG] = 10 * 1000 // 10 sec
+        props[StreamsConfig.COMMIT_INTERVAL_MS_CONFIG] = 1000 // 10 sec
         props[StreamsConfig.DEFAULT_TIMESTAMP_EXTRACTOR_CLASS_CONFIG] = TripTimestampExtractor::class.java
 
         return props

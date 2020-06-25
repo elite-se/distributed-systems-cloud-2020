@@ -5,7 +5,7 @@ import java.util.*
 
 open class KafkaConfig {
 
-    private val bootstrap_server = "34.91.21.72:31090"
+    private val bootstrap_server = "kafka.cloud.elite-se.xyz:31090"
 
     open fun createProperties(): Properties {
         val props = Properties()
