@@ -18,7 +18,8 @@ func receiveKafkaMessages(ctx context.Context, broker string, group string, topi
 		"broker.address.family": "v4",
 		"group.id":              group,
 		"session.timeout.ms":    6000,
-		"auto.offset.reset":     "earliest"})
+		"auto.offset.reset":     "latest",
+		"enable.auto.commit":    false})
 	if err != nil {
 		_, _ = fmt.Fprintf(os.Stderr, "Failed to create consumer: %s\n", err)
 		os.Exit(1)
