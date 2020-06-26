@@ -9,8 +9,12 @@ plugins {
     kotlin("jvm")
     idea
     application
+    id("com.github.johnrengelman.shadow") version "5.2.0"
 }
 
+application {
+    mainClassName = "se.elite.dsc.kafka.taxi.trip.TripConsumerMainKt"
+}
 
 dependencies {
     implementation(kotlin("stdlib"))

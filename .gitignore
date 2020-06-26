@@ -1,4 +1,6 @@
 .idea/
+.DS_Store
+mongo-db/
 .gradle/
 gradle/
 build/
