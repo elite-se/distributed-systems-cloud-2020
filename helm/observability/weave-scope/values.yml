@@ -25,17 +25,17 @@ weave-scope-frontend:
   enabled: true
     # weave-scope-frontend.resources.*: controls requests/limits for the frontend
     # weave-scope-frontend.resources.* values are all optional but should not be set to empty values
-    resources:
-      requests:
-        # weave-scope-frontend.resources.requests.cpu: CPU req. in MHz (m)
-        cpu: "1m"
-        # weave-scope-frontend.resources.requests.memory: memory req. in MiB (Mi)
-        memory: "32Mi"
-      limits:
-        # weave-scope-frontend.resources.limits.cpu: CPU limit in MHz (m)
-        cpu: "150m"
-        # weave-scope-frontend.resources.limits.memory: memory limit in MiB (Mi)
-        memory: "200Mi"
+  resources:
+    requests:
+      # weave-scope-frontend.resources.requests.cpu: CPU req. in MHz (m)
+      cpu: "1m"
+      # weave-scope-frontend.resources.requests.memory: memory req. in MiB (Mi)
+      memory: "32Mi"
+    limits:
+      # weave-scope-frontend.resources.limits.cpu: CPU limit in MHz (m)
+      cpu: "150m"
+      # weave-scope-frontend.resources.limits.memory: memory limit in MiB (Mi)
+      memory: "200Mi"
   flags: []
   # weave-scope-frontend Ingress
   ingress:
