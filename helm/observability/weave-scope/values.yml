@@ -31,7 +31,7 @@ weave-scope-frontend:
         cpu: "1m"
         # weave-scope-frontend.resources.requests.memory: memory req. in MiB (Mi)
         memory: "32Mi"
-      # limits:
+      limits:
         # weave-scope-frontend.resources.limits.cpu: CPU limit in MHz (m)
         cpu: "150m"
         # weave-scope-frontend.resources.limits.memory: memory limit in MiB (Mi)
