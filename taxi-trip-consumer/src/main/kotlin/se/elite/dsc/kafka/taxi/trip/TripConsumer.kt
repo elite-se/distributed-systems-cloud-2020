@@ -1,5 +1,6 @@
 package se.elite.dsc.kafka.taxi.trip
 
+import io.prometheus.client.Counter
 import org.apache.kafka.clients.consumer.KafkaConsumer
 import org.slf4j.LoggerFactory
 import se.elite.dsc.kafka.taxi.Cell
@@ -11,6 +12,7 @@ import java.time.ZoneId
 import java.util.*
 
 class TripConsumer(val config: TripConsumerConfig) {
+    val eventsCounter = Counter.build().name("events_total").help("Total events.").register()
 
     private val log = LoggerFactory.getLogger(TripConsumer::class.java)
     private val topic = config.sourcetopic
@@ -24,6 +26,8 @@ class TripConsumer(val config: TripConsumerConfig) {
         while (true) {
             val records = consumer.poll(Duration.ofSeconds(1))
             records.iterator().forEach {
+                eventsCounter.inc();
+
                 val cell = it.key()
                 val trip = it.value()
                 val tripDayOfYear = convertDate(trip.pickupDatetime).dayOfYear

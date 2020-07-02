@@ -23,6 +23,10 @@ dependencies {
     implementation("org.apache.kafka:kafka-streams:2.5.0")
     implementation("org.slf4j:slf4j-api:1.7.25")
     implementation("org.slf4j:slf4j-log4j12:1.7.25")
+    implementation("io.prometheus:simpleclient:0.9.0")
+    implementation("io.prometheus:simpleclient_hotspot:0.9.0")
+    implementation("io.prometheus:simpleclient_httpserver:0.9.0")
+    implementation("io.prometheus:simpleclient_pushgateway:0.9.0")
     implementation(project(":lib"))
 }
 
