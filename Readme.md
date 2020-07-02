@@ -2,6 +2,15 @@
 
 ![Project summary](diagrams/project_overview.png)
 
+## Subdomains & Endpoints:
+
+**Grafana:** [https://grafana.cloud.elite-se.xyz](https://grafana.cloud.elite-se.xyz/)
+**Prometheus:** [http://prometheus.cloud.elite-se.xyz:30967](http://prometheus.cloud.elite-se.xyz:30967/)
+**Weavescope:** [http://weave-scope.cloud.elite-se.xyz:30967](http://weave-scope.cloud.elite-se.xyz:30967/)
+**Taxi Dashboard:**
+**Taxi Analytics:**
+
+
 ## Demo Use Case
 
 [New York City Taxi Dataset](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
