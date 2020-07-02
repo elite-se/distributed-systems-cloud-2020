@@ -21,3 +21,6 @@ spec:
       containers:
         - name: taxi-trip-consumer
           image: gcr.io/distributed-systems-279515/taxi-trip-consumer:1
+          env:
+            - name: MONGODB_ATLAS_CONNECTION_STRING
+              value: "mongodb+srv://mongoadmin:D3YIzSqm87QD6so4@abs-mongo-cluster-oalh6.azure.mongodb.net/admin?retryWrites=true&w=majority"
