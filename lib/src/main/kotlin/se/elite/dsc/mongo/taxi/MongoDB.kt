@@ -8,9 +8,9 @@ import com.mongodb.client.ClientSession
 import com.mongodb.client.TransactionBody
 import org.litote.kmongo.KMongo
 
-
 object MongoDB {
-    val client = KMongo.createClient("mongodb://localhost:4040")
+    private val connection_uri = System.getenv("MONGODB_ATLAS_CONNECTION_STRING")
+    val client = KMongo.createClient(connection_uri)
 
     fun <T> withTransaction(
             options: TransactionOptions
