@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: aggregated-visualisations
+
+spec:
+  replicas: 4
+
+  selector:
+    matchLabels:
+      deploy: aggregated-visualisations
+
+  template:
+    metadata:
+      labels:
+        deploy: aggregated-visualisations
+    spec:
+      containers:
+        - name: aggregated-visualisations
+          image: gcr.io/distributed-systems-279515/aggregated-visualisations:3
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          resources:
+            requests:
+              cpu: 50m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 1Gi

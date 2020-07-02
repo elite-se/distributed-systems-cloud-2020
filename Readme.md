@@ -32,6 +32,7 @@
 1. taxi-trip-converter: `docker build -f taxi-trip-converter/Dockerfile -t taxi-trip-converter .`
 2. taxi-trip-metrics: `docker build -f taxi-trip-metrics/Dockerfile -t taxi-trip-metrics .`
 3. taxi-trip-consumer: `docker build -f taxi-trip-consumer/Dockerfile -t taxi-trip-consumer .`
+4. taxi-trip-aggregated-visualisations: `docker build -f taxi-trip-aggregated-visualisations/Dockerfile -t aggregated-visualisations .`
 
 ### Start docker containers
 
