@@ -452,7 +452,7 @@ nodeExporter:
   ## Custom Update Strategy
   ##
   updateStrategy:
-    type: RollingUpdate
+    type: Recreate
 
   ## Additional node-exporter container arguments
   ##
@@ -750,7 +750,7 @@ server:
     ## If true, Prometheus server will create/use a Persistent Volume Claim
     ## If false, use emptyDir
     ##
-    enabled: false
+    enabled: true
 
     ## Prometheus server data Persistent Volume access modes
     ## Must match those of existing PV or dynamic provisioner
@@ -774,7 +774,7 @@ server:
 
     ## Prometheus server data Persistent Volume size
     ##
-    size: 4Gi
+    size: 10Gi
 
     ## Prometheus server data Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
