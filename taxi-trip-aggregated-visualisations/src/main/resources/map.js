@@ -10,8 +10,9 @@ const START_CELL_CENTRE = [40.831164, -74.192491],
       START_CELL_CENTRE[1] - (CELL_LONG_LENGTH / 2)], // Coordinates of top-left corner of cell 1.1
     CELL_LENGTH = [CELL_LAT_LENGTH, CELL_LONG_LENGTH],
     MAX_CLAT = 45,
-    MAX_CLONG = 72,
-    HIGH_PROFIT_METRIC = 3000;
+    MAX_CLONG = 72;
+
+let HIGH_PROFIT_METRIC = 1500;
 
 let map,
     layer,
@@ -48,18 +49,23 @@ $(document).ready(function () {
   }
   map.addLayer(layer).fitBounds(layer.getBounds());
 
+  //set HIGH-Cell Metric to max of the cellData
   for (let i = 0; i < document.cellData.length; i++) {
-    //document.cellData is created within the kotil dsl part
+    const profit = document.cellData[i];
+    if (profit.fareSum > HIGH_PROFIT_METRIC) {
+      HIGH_PROFIT_METRIC = profit.fareSum;
+    }
+  }
+
+  for (let i = 0; i < document.cellData.length; i++) {
+    //document.cellData is created within the kotlin dsl part
     let profit = document.cellData[i];
     let val = ((profit.fareSum > HIGH_PROFIT_METRIC) ? HIGH_PROFIT_METRIC
         : profit.fareSum);
 
     grid[profit.cell.clat][profit.cell.clong].setStyle(
         {fillOpacity: val / HIGH_PROFIT_METRIC});
-
-    console.log("Setting profit for ", profit);
   }
-  console.log(grid);
 });
 
 $('#seek').click(function () {
