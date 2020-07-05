@@ -23,6 +23,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            - name: MONGODB_ATLAS_CONNECTION_STRING
+              value: "mongodb+srv://mongoadmin:D3YIzSqm87QD6so4@abs-mongo-cluster-oalh6.azure.mongodb.net/admin?retryWrites=true&w=majority"
           resources:
             requests:
               cpu: 50m
