@@ -9,11 +9,14 @@ import kotlinx.html.dom.*
 import org.slf4j.LoggerFactory
 import org.w3c.dom.Document
 import se.elite.dsc.mongo.taxi.AggrProfit
-import se.elite.dsc.mongo.taxi.Profit
 import se.elite.dsc.mongo.taxi.ProfitRepository
+import java.io.BufferedReader
 import java.io.IOException
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.nio.charset.StandardCharsets
+import java.nio.file.Files.lines
+import java.util.stream.Collectors
 
 fun Double.format(digits: Int) = "%.${digits}f".format(this)
 
@@ -26,7 +29,12 @@ private fun HttpExchange.sendResponse(code: Int, answer: String) = sendResponse(
 
 private fun HttpExchange.sendStaticFile(path: String) {
     try {
-        sendResponse(200, AggregatedVisualisationsServer::class.java.getResourceAsStream(path).readAllBytes())
+        val text = BufferedReader(
+                InputStreamReader(AggregatedVisualisationsServer::class.java.getResourceAsStream(path), StandardCharsets.UTF_8))
+                .lines()
+                .collect(Collectors.joining("\n"))
+
+        sendResponse(200, text);
     } catch (e: IOException) {
         println("Exception loading Static File " + path)
     }
