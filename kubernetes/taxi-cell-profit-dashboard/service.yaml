@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: profit-dashboard
+  namespace: default
+spec:
+  selector:
+    deploy: profit-dashboard
+  ports:
+  - port: 80
+    targetPort: 80

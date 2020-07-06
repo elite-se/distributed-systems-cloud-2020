@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: profit-dashboard
+spec:
+  replicas: 1
+
+  selector:
+    matchLabels:
+      deploy: profit-dashboard
+
+  template:
+    metadata:
+      labels:
+        deploy: profit-dashboard
+    spec:
+      containers:
+        - name: profit-dashboard
+          image: gcr.io/distributed-systems-279515/profit-dashboard:1
+          resources:
+            requests:
+              cpu: 10m
+              memory: 100Mi
+            limits:
+              cpu: 100m
+              memory: 200Mi
