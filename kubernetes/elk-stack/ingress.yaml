@@ -1,0 +1,14 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: kibana
+  namespace: default
+spec:
+  rules:
+  - host: kibana.cloud.elite-se.xyz
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: quickstart-kb-http
+          servicePort: 5601
