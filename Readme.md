@@ -32,7 +32,7 @@
 - Microservice Architectures in Practice
 - Kafka
 - GoLang
-- AWS Load Balancer
+- HAProxy
 
 ## Setup
 
