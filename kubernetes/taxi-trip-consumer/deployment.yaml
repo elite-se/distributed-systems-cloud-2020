@@ -23,4 +23,4 @@ spec:
           image: gcr.io/distributed-systems-279515/taxi-trip-consumer:1
           env:
             - name: MONGODB_ATLAS_CONNECTION_STRING
-              value: "mongodb+srv://mongoadmin:D3YIzSqm87QD6so4@abs-mongo-cluster-oalh6.azure.mongodb.net/admin?retryWrites=true&w=majority"
+              value: "mongodb://mongoadmin:123456@mongo-db-mongodb.default.svc.cluster.local:27017/profits"
