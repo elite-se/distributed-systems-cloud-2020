@@ -46,8 +46,7 @@ class TripConverter(val config: TripConverterConfig) {
                     }
                 }
                 .map { _: String?, value: String ->
-                    log.info("\tvalue: {}", value)
-                    Thread.sleep(2)
+                    Thread.sleep(25)
                     val trip = constructTripFromString(value)
                     KeyValue(Cell(START_CELL_ORIGIN, CELL_LENGTH, trip.pickupLoc), trip)
                 }
