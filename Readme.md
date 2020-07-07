@@ -5,10 +5,14 @@
 ## Subdomains & Endpoints:
 
 **Grafana:** [https://grafana.cloud.elite-se.xyz](https://grafana.cloud.elite-se.xyz/)
+
 **Prometheus:** [http://prometheus.cloud.elite-se.xyz:30967](http://prometheus.cloud.elite-se.xyz:30967/)
+
 **Weavescope:** [http://weave-scope.cloud.elite-se.xyz:30967](http://weave-scope.cloud.elite-se.xyz:30967/)
-**Taxi Dashboard:**
-**Taxi Analytics:**
+
+**Taxi Dashboard:** [http://av.cloud.elite-se.xyz:30967/](http://av.cloud.elite-se.xyz:30967/)
+
+**Taxi Analytics:** [http://maw-map.cloud.elite-se.xyz:30967/](http://maw-map.cloud.elite-se.xyz:30967/)
 
 
 ## Demo Use Case
