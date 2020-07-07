@@ -68,17 +68,17 @@ auth:
   ## Enable authentication
   ## ref: https://docs.mongodb.com/manual/tutorial/enable-authentication/
   ##
-  enabled: false
+  enabled: true
   ## MongoDB root password
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#setting-the-root-password-on-first-run
   ##
-  rootPassword: ""
+  rootPassword: "123456"
   ## MongoDB custom user and database
   ## ref: https://github.com/bitnami/bitnami-docker-mongodb/blob/master/README.md#creating-a-user-and-database-on-first-run
   ##
-  # username: username
-  # password: password
-  # database: database
+  username: "mongoadmin"
+  password: "123456"
+  database: "profits"
   ## Key used for replica set authentication
   ## Ignored when mongodb.architecture=standalone
   ##
@@ -222,7 +222,7 @@ replicaCount: 2
 ## StrategyType for MongoDB statefulset
 ## It can be set to RollingUpdate or Recreate by default.
 ##
-strategyType: RollingUpdate
+strategyType: Recreate
 
 ## MongoDB should be initialized one by one when building the replicaset for the first time.
 ##
@@ -489,7 +489,7 @@ externalAccess:
   service:
     ## Service type. Allowed values: LoadBalancer or NodePort
     ##
-    type: LoadBalancer
+    type: NodePort
     ## Port used when service type is LoadBalancer
     ##
     port: 27017
@@ -513,11 +513,12 @@ externalAccess:
     ##   - 30001
     ##   - 30002
     ##
-    nodePorts: []
+    nodePorts:
+      - 30000
     ## When service type is NodePort, you can specify the domain used for Kafka advertised listeners.
     ## If not specified, the container will try to get the kubernetes node external IP
     ##
-    # domain: mydomain.com
+    domain: mongo-db.cloud.elite-se.xyz
     ## Provide any additional annotations which may be required. Evaluated as a template
     ##
     annotations: {}
@@ -777,7 +778,7 @@ volumePermissions:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: false
+  enabled: true
   ## Bitnami MongoDB Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
   ##
