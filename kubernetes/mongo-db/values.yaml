@@ -289,7 +289,7 @@ resources:
   # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
   limits:
     memory: 1Gi
-  requests: {}
+  requests:
     cpu: 100m
     memory: 128Mi
 
@@ -777,7 +777,7 @@ volumePermissions:
 ## Prometheus Exporter / Metrics
 ##
 metrics:
-  enabled: true
+  enabled: false
   ## Bitnami MongoDB Promtheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/mongodb-exporter/tags/
   ##
