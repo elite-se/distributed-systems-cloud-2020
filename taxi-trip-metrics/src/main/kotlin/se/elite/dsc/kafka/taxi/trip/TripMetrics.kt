@@ -51,11 +51,9 @@ class TripMetrics(val config: TripMetricsConfig) {
                                 .withValueSerde(pointSerde))
                 .toStream()
 
-        windowed.foreach { key: Windowed<Cell>, value: Point? -> log.info("key: ${key.key()}, val:$value") }
-        val average: KStream<Cell?, Double> = windowed
-                .map<Cell?, Double> { window: Windowed<Cell>, point: Point -> KeyValue(window.key(), round(point.y * 100) / 100) }
-        average.foreach { key: Cell?, value: Double? -> log.info("key: $key, val: $value") }
-        average.to(config.sinkTopic, Produced.with(cellSerde, Serdes.Double()))
+        windowed.map<Cell?, Double> { window: Windowed<Cell>, point: Point -> KeyValue(window.key(), round(point.y * 100) / 100) }
+                .foreach { key: Cell?, value: Double? -> log.info("key: $key, val: $value") }
+                .to(config.sinkTopic, Produced.with(cellSerde, Serdes.Double()))
 
         return KafkaStreams(builder.build(), props)
     }
