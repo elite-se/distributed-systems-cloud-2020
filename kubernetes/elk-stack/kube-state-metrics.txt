@@ -1,0 +1,4 @@
+In google cloud shell:
+kubectl create clusterrolebinding cluster-admin-binding --clusterrole=cluster-admin --user=$(gcloud info --format='value(config.account)')
+In the repo/kubernetes/elk-stack:
+kubectl apply -f standard
