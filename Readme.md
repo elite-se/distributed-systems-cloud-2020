@@ -1,8 +1,10 @@
 # Distributed Systems Demo 2020
 
-![Project summary](diagrams/project_overview.png)
+![Banner](screenshots/zz_banner.png)
 
 ## Subdomains & Endpoints:
+
+**CLUSTER DOES NOT EXISTS ANYMORE, LINKS OUTDATED**
 
 **Grafana:** [https://grafana.cloud.elite-se.xyz](https://grafana.cloud.elite-se.xyz/)
 
@@ -20,6 +22,10 @@
 [New York City Taxi Dataset](https://www1.nyc.gov/site/tlc/about/tlc-trip-record-data.page)
 
 ![Taxi Data Mindmap](diagrams/taxi_data_mindmap.JPG)
+
+![Project summary](diagrams/project_overview.png)
+
+![Taxi Map](screenshots/aggregated_visualisations_map.png)
 
 **Basic idea**: 
 - The cloud team hosts a small Kubernetes Cluster (hosted by Google Cloud) with basic monitoring services
